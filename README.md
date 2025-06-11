@@ -5,6 +5,8 @@ Version: 1.0
 
 The RBC-PINN project is used to reconstruct temperature and pressure fields based on velocity data in thermal convective flows. Details on the architecture and the method are found in [1]. We are happy to help with modifying the PINN to reconstruct only pressure and velocity gradients in non-thermal flows. Also, The proposed PINN is compatible with PTV data generated with proPTV: https://github.com/RobinBarta/proPTV.
 
+The project comes with a test case involving a DNS generated Rayleigh-Bénard convection with Ra=1E6 and Pr=0.7.
+
 ## How to install?
 
 #### Requirements:
