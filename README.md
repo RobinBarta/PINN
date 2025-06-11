@@ -1,25 +1,25 @@
 1. Juni 2025
 Version: 1.0
 
-## LPINN - Description
+## Project description
 
-It is used to reconstruct temperature and pressure fields based on velocity data in thermal convective flows. Details on the architecture and the method are found in [1]. The PINN can also be used to assimilate pressure only in non-thermal flows. The proposed PINN is compatible with PTV data processed with proPTV: https://github.com/RobinBarta/proPTV.
+The RBC-PINN project is used to reconstruct temperature and pressure fields based on velocity data in thermal convective flows. Details on the architecture and the method are found in [1]. We are happy to help with modifying the PINN to reconstruct only pressure and velocity gradients in non-thermal flows. Also, The proposed PINN is compatible with PTV data generated with proPTV: https://github.com/RobinBarta/proPTV.
 
 ## How to install?
 
 #### Requirements:
 
-LPINN requires Python 3.10 installed with pip. It was developed and tested on Python 3.10.4 which can be downloaded at: https://www.python.org/downloads/release/python-3104/
+RBC-PINN requires Python 3.10 installed with pip. It was developed and tested on Python 3.10.4 which can be downloaded at: https://www.python.org/downloads/release/python-3104/
 
 #### Installation:
 
-1) download the LPINN project to a desired location
+1) download the RBC-PINN project to a desired location
 
 2) install python 3.10.4 and pip on Windows or Linux
 
 3) install cuda12.3 and cudnn8.9.7 for your gpu
 
-4) open your terminal, navigate into the LPINN project folder location and set up a venv with:
+4) open your terminal, navigate into the PINN project folder location and set up a venv with:
 
   `python -m venv venv`
 
@@ -55,7 +55,7 @@ LPINN requires Python 3.10 installed with pip. It was developed and tested on Py
 
 ## How to cite?
 
-When LPINN is useful for your scientific work and you use it or parts of it, you need to cite us:
+When PINN is useful for your scientific work and you use it or parts of it, you need to cite us:
 
 [1] R.Barta, M.-C. Volk, C. Bauer, C. Wagner and M. Mommert. Temperature and pressure reconstruction in turbulent Rayleigh-Bénard convection by Lagrangian velocities using PINN, 2025. Preprint: https://doi.org/10.48550/arXiv.2505.02580
 
@@ -68,6 +68,6 @@ and include the licence file in all copies with modifications or other code that
 
 ## Contact
 
-If you have a question or need help installing LPINN or fixing a bug you have found, please contact me: michael.mommert@dlr.de
+If you have a question or need help installing PINN or fixing a bug you have found, please contact me: michael.mommert@dlr.de
 
 I am happy to help and look forward to meeting you.
