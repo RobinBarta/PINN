@@ -70,6 +70,6 @@ and include the licence file in all copies with modifications or other code that
 
 ## Contact
 
-If you have a question or need help installing PINN or fixing a bug you have found, please contact me: michael.mommert@dlr.de
+If you have a question or need help installing PINN or fixing a bug you have found, please contact us via: michael.mommert@dlr.de
 
-I am happy to help and look forward to meeting you.
+We are happy to help and look forward to meeting you.
