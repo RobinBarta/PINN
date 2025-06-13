@@ -2,7 +2,7 @@ class Parameter:
     # ------------------
     # data parameters
     # ------------------
-    casename, filename = 'RBC_PTV_1E6_07', 'RBC_DNS_1E6_07_t_11.npz'
+    casename, filename = 'RBC_PTV_1E6_07', 'RBC_PTV_1E6_07_t_11.npz'
     Ra, Pr = 1e6, 0.7
     
     # ------------------
