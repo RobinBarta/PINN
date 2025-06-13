@@ -251,43 +251,6 @@ class PINN(keras.Model):
             T_yy = tape.gradient(T_y, inputs_col)[...,2]
             T_zz = tape.gradient(T_z, inputs_col)[...,3]    
             
-            #p_xx = tape.gradient(p_x, inputs_col)[...,1]
-            #p_yy = tape.gradient(p_y, inputs_col)[...,2]
-            #p_zz = tape.gradient(p_z, inputs_col)[...,3] 
-            
-            #u_xt, u_xx, u_xy, u_xz = tf.unstack(tape.gradient(u_x, inputs_col), axis=-1)
-            #v_xt, v_xx, v_xy, v_xz = tf.unstack(tape.gradient(v_x, inputs_col), axis=-1)
-            #w_xt, w_xx, w_xy, w_xz = tf.unstack(tape.gradient(w_x, inputs_col), axis=-1)
-            
-            #u_yt, u_yx, u_yy, u_yz = tf.unstack(tape.gradient(u_y, inputs_col), axis=-1)
-            #v_yt, v_yx, v_yy, v_yz = tf.unstack(tape.gradient(v_y, inputs_col), axis=-1)
-            #w_yt, w_yx, w_yy, w_yz = tf.unstack(tape.gradient(w_y, inputs_col), axis=-1)
-            
-            #u_zt, u_zx, u_zy, u_zz = tf.unstack(tape.gradient(u_z, inputs_col), axis=-1)
-            #v_zt, v_zx, v_zy, v_zz = tf.unstack(tape.gradient(v_z, inputs_col), axis=-1)
-            #w_zt, w_zx, w_zy, w_zz = tf.unstack(tape.gradient(w_z, inputs_col), axis=-1)
-            
-            # third derivatives
-            #u_yxx = tape.gradient(u_yx, inputs_col)[...,1]
-            #u_zxx = tape.gradient(u_zx, inputs_col)[...,1]
-            #u_yyy = tape.gradient(u_yy, inputs_col)[...,2]
-            #u_zyy = tape.gradient(u_zy, inputs_col)[...,2]
-            #u_yzz = tape.gradient(u_yz, inputs_col)[...,3]
-            #u_zzz = tape.gradient(u_zz, inputs_col)[...,3]
-            
-            #v_xxx = tape.gradient(v_xx, inputs_col)[...,1]
-            #v_zxx = tape.gradient(v_zx, inputs_col)[...,1]
-            #v_xyy = tape.gradient(v_xy, inputs_col)[...,2]
-            #v_zyy = tape.gradient(v_zy, inputs_col)[...,2]
-            #v_xzz = tape.gradient(v_xz, inputs_col)[...,3]
-            #v_zzz = tape.gradient(v_zz, inputs_col)[...,3]
-            
-            #w_xxx = tape.gradient(w_xx, inputs_col)[...,1]
-            #w_yxx = tape.gradient(w_yx, inputs_col)[...,1]
-            #w_xyy = tape.gradient(w_xy, inputs_col)[...,2]
-            #w_yyy = tape.gradient(w_yy, inputs_col)[...,2]
-            #w_xzz = tape.gradient(w_xz, inputs_col)[...,3]
-            #w_yzz = tape.gradient(w_yz, inputs_col)[...,3]
             del tape
           
         # loss NSE
@@ -296,12 +259,6 @@ class PINN(keras.Model):
         NSE_w = w_t + u*w_x + v*w_y + w*w_z + p_z - np.sqrt(self.Pr/self.Ra)*(w_xx + w_yy + w_zz) - T
         loss_NSE = tf.reduce_mean(tf.square(tf.stack([NSE_u, NSE_v, NSE_w])))
         
-        # loss VOR
-        #VOR_u = (w_yt - v_zt) + u*(w_yx-v_zx) + v*(w_yy-v_zy) + w*(w_yz-v_zz) - (w_y-v_z)*u_x - (u_z-w_x)*u_y - (v_x-u_y)*u_z - tf.sqrt(self.Pr/self.Ra)*(w_yxx-v_zxx + w_yyy-v_zyy + w_yzz-v_zzz) - T_y
-        #VOR_v = (u_zt - w_xt) + u*(u_zx-w_xx) + v*(u_zy-w_xy) + w*(u_zz-w_xz) - (w_y-v_z)*v_x - (u_z-w_x)*v_y - (v_x-u_y)*v_z - tf.sqrt(self.Pr/self.Ra)*(u_zxx-w_xxx + u_zyy-w_xyy + u_zzz-w_xzz) + T_x
-        #VOR_w = (v_xt - u_yt) + u*(v_xx-u_yx) + v*(v_xy-u_yy) + w*(v_xz-u_yz) - (w_y-v_z)*w_x - (u_z-w_x)*w_y - (v_x-u_y)*w_z - tf.sqrt(self.Pr/self.Ra)*(v_xxx-u_yxx + v_xyy-u_yyy + v_xzz-u_yzz)
-        #loss_VOR = tf.reduce_mean(tf.square(tf.stack([VOR_u, VOR_v, VOR_w])))
-        
         # loss Energy Equation
         EE = T_t + u*T_x + v*T_y + w*T_z - np.sqrt(1/(self.Pr*self.Ra))*(T_xx + T_yy + T_zz)
         loss_EE = tf.reduce_mean(tf.square(EE))
@@ -309,10 +266,6 @@ class PINN(keras.Model):
         # loss continuity equation
         divU = u_x + v_y + w_z
         loss_conti = tf.reduce_mean(tf.square(divU))
-        
-        # pressure poisson equation
-        #PP = p_xx + p_yy + p_zz + (u_x*u_x + v_y*v_y + w_z*w_z + 2*(u_y*v_x + v_z*w_y + w_x*u_z)) - T_z
-        #loss_pp = tf.reduce_mean(tf.square(PP))
         
         # centering for the pressure field
         loss_col_pcent = tf.abs(tf.reduce_mean(p))
