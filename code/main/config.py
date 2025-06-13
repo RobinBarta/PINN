@@ -29,12 +29,16 @@ class Parameter:
     lambda_conti = 1e-3
     lambda_pcent = 0 # 1e-3
     lambda_bounds = 1e-4
-    
-    lambda_ux, lambda_uy, lambda_uz0, lambda_uz1 = 0, 0, 0, 0 # 0 or 1
-    lambda_vx, lambda_vy, lambda_vz0, lambda_vz1 = 0, 0, 0, 0 # 0 or 1 
-    lambda_wx, lambda_wy, lambda_wz0, lambda_wz1 = 0, 0, 0, 0 # 0 or 1 
-    lambda_px, lambda_py, lambda_pz0, lambda_pz1 = 0, 0, 0, 0 # 0 or 1 
-    lambda_Tx, lambda_Ty, lambda_Tz0, lambda_Tz1 = 0, 0, 1, 1 # 0 or 1 
+
+    # index x - Sidewalls at x=0 and x=1 (u,v,w = 0 and dTdx = 0 and dp_dx = 0)
+    # index y - Sidewalls at y=0 and y=1 (u,v,w = 0 and dTdy = 0 and dp_dy = 0)
+    # index z0 - Sidewall at z=0 (u,v,w = 0 and T = 0.5 and dp_dz = 0.5)
+    # index z1 - Sidewall at z=1 (u,v,w = 0 and T = -0.5 and dp_dz = -0.5)
+    lambda_ux, lambda_uy, lambda_uz0, lambda_uz1 = 0, 0, 0, 0 # float: 0 to 1 to scale lambda_bounds for each sidewall
+    lambda_vx, lambda_vy, lambda_vz0, lambda_vz1 = 0, 0, 0, 0 # float: 0 to 1 to scale lambda_bounds for each sidewall 
+    lambda_wx, lambda_wy, lambda_wz0, lambda_wz1 = 0, 0, 0, 0 # float: 0 to 1 to scale lambda_bounds for each sidewall
+    lambda_px, lambda_py, lambda_pz0, lambda_pz1 = 0, 0, 0, 0 # float: 0 to 1 to scale lambda_bounds for each sidewall
+    lambda_Tx, lambda_Ty, lambda_Tz0, lambda_Tz1 = 0, 0, 1, 1 # float: 0 to 1 to scale lambda_bounds for each sidewall 
     
     # ----------
     # fine tuning , only if Nu>0 is selected
