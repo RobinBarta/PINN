@@ -12,7 +12,6 @@ from matplotlib.ticker import AutoMinorLocator
 
 # %%
 
-
 def pearson_correlation(x, y):
     x = tf.cast(x, tf.float32)
     y = tf.cast(y, tf.float32)
@@ -24,7 +23,6 @@ def pearson_correlation(x, y):
     denominator = K.sqrt(K.sum(K.square(x_centered)) * K.sum(K.square(y_centered)))   
     pearson_corr = numerator / (denominator + K.epsilon())
     return pearson_corr
-
 
 class CustomLoggingCallback(keras.callbacks.Callback):
     def __init__(self, test_data, data_plot_truth, model, N_epochs, log_dir, param):
@@ -137,7 +135,6 @@ class CustomLoggingCallback(keras.callbacks.Callback):
     def on_train_end(self, logs=None):
         # Close the log file when training ends
         self.log_file.close()
-
 
 class PINN(keras.Model):
     def __init__(self, params):
