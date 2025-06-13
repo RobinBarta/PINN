@@ -8,7 +8,7 @@ import os
 # %%
 
 class Dataset_parameter:
-    NameOfDataSet = 'RBC_PTV_1E10_7'
+    NameOfDataSet = 'YOUR_CASENAME' # enter your casename here
 
 # %%
 
