@@ -138,22 +138,8 @@ class CustomLoggingCallback(keras.callbacks.Callback):
 
 class PINN(keras.Model):
     def __init__(self, params):
-        super(PINN, self).__init__() # Pass kwargs to the parent class           
+        super(PINN, self).__init__()          
         self.params = params
-        # network architecture
-        self.N_layer = self.params.N_layer
-        self.N_neuron = self.params.N_neuron
-        # dimensionless numbers
-        self.Pr = self.params.Pr
-        self.Ra = self.params.Ra
-        # weights
-        self.lambda_data = self.params.lambda_data
-        self.lambda_conti = self.params.lambda_conti
-        self.lambda_NSE = self.params.lambda_NSE
-        self.lambda_EE = self.params.lambda_EE
-        self.lambda_bounds = self.params.lambda_bounds
-        # scaling factors
-        self.Nu = self.params.Nu
         # functions
         self.activation_function = lambda a: tf.sin(a)
         self.model = self.build_model()
@@ -163,8 +149,8 @@ class PINN(keras.Model):
         # input layer
         model.add(layers.Input(shape=(4,)))  # 4 inputs: t, x, y, z
         # hidden layers
-        for i in range(self.N_layer):
-            model.add(layers.Dense(self.N_neuron, activation=self.activation_function))
+        for i in range(self.params.N_layer):
+            model.add(layers.Dense(self.params.N_neuron, activation=self.activation_function))
         # output layer
         model.add(layers.Dense(5))   # Output is u,v,w,T_fluc,p
         return model
@@ -174,10 +160,10 @@ class PINN(keras.Model):
         #return y_pred
         t, x, y, z = tf.unstack(inputs, axis=1)
         u, v, w, T_fluc, p = tf.unstack(y_pred, axis=1)
-        if self.Nu == 0.0:
+        if self.params.Nu == 0.0:
             T = T_fluc
         else:  
-            Tmean = tf.where(z<0.5, (tf.exp(-z*2*self.Nu)-tf.exp(-self.Nu))/(2-2*tf.exp(-self.Nu)), (-tf.exp((z-1)*2*self.Nu)+tf.exp(-self.Nu))/(2-2*tf.exp(-self.Nu)))
+            Tmean = tf.where(z<0.5, (tf.exp(-z*2*self.params.Nu)-tf.exp(-self.params.Nu))/(2-2*tf.exp(-self.params.Nu)), (-tf.exp((z-1)*2*self.params.Nu)+tf.exp(-self.params.Nu))/(2-2*tf.exp(-self.params.Nu)))
             T = Tmean + (z**2-z)*T_fluc
         return tf.stack([u, v, w, T, p], axis=1) 
 
@@ -251,13 +237,13 @@ class PINN(keras.Model):
             del tape
           
         # loss NSE
-        NSE_u = u_t + u*u_x + v*u_y + w*u_z + p_x - np.sqrt(self.Pr/self.Ra)*(u_xx + u_yy + u_zz)
-        NSE_v = v_t + u*v_x + v*v_y + w*v_z + p_y - np.sqrt(self.Pr/self.Ra)*(v_xx + v_yy + v_zz)
-        NSE_w = w_t + u*w_x + v*w_y + w*w_z + p_z - np.sqrt(self.Pr/self.Ra)*(w_xx + w_yy + w_zz) - T
+        NSE_u = u_t + u*u_x + v*u_y + w*u_z + p_x - np.sqrt(self.params.Pr/self.params.Ra)*(u_xx + u_yy + u_zz)
+        NSE_v = v_t + u*v_x + v*v_y + w*v_z + p_y - np.sqrt(self.params.Pr/self.params.Ra)*(v_xx + v_yy + v_zz)
+        NSE_w = w_t + u*w_x + v*w_y + w*w_z + p_z - np.sqrt(self.params.Pr/self.params.Ra)*(w_xx + w_yy + w_zz) - T
         loss_NSE = tf.reduce_mean(tf.square(tf.stack([NSE_u, NSE_v, NSE_w])))
         
         # loss Energy Equation
-        EE = T_t + u*T_x + v*T_y + w*T_z - np.sqrt(1/(self.Pr*self.Ra))*(T_xx + T_yy + T_zz)
+        EE = T_t + u*T_x + v*T_y + w*T_z - np.sqrt(1/(self.params.Pr*self.params.Ra))*(T_xx + T_yy + T_zz)
         loss_EE = tf.reduce_mean(tf.square(EE))
         
         # loss continuity equation
@@ -382,35 +368,35 @@ class PINN(keras.Model):
         # total loss
         # --------------------------------
         total_loss = (# data loss
-                      self.lambda_data*loss_data +
+                      self.params.lambda_data*loss_data +
                       # PDE losses
-                      self.lambda_NSE*loss_NSE +
-                      self.lambda_EE*loss_EE +
-                      self.lambda_conti*loss_conti +
+                      self.params.lambda_NSE*loss_NSE +
+                      self.params.lambda_EE*loss_EE +
+                      self.params.lambda_conti*loss_conti +
                       # pcenter losses
                       self.params.lambda_pcent*loss_data_pcent +
                       #self.params.lambda_pcent*loss_col_pcent +
                       # bounds losses
-                      self.lambda_bounds*self.params.lambda_Tz1*loss_Dirichlet_T_z1 +
-                      self.lambda_bounds*self.params.lambda_Tz0*loss_Dirichlet_T_z0 +
-                      self.lambda_bounds*self.params.lambda_Tx*loss_Neumann_T_x + 
-                      self.lambda_bounds*self.params.lambda_Ty*loss_Neumann_T_y + 
-                      self.lambda_bounds*self.params.lambda_pz0*loss_Dirichlet_p_z0 + 
-                      self.lambda_bounds*self.params.lambda_pz1*loss_Dirichlet_p_z1 + 
-                      self.lambda_bounds*self.params.lambda_px*loss_Neumann_p_x + 
-                      self.lambda_bounds*self.params.lambda_py*loss_Neumann_p_y + 
-                      self.lambda_bounds*self.params.lambda_uz1*loss_Dirichlet_u_z1 + 
-                      self.lambda_bounds*self.params.lambda_uz0*loss_Dirichlet_u_z0 + 
-                      self.lambda_bounds*self.params.lambda_uy*loss_Dirichlet_u_y +
-                      self.lambda_bounds*self.params.lambda_ux*loss_Dirichlet_u_x +
-                      self.lambda_bounds*self.params.lambda_vz1*loss_Dirichlet_v_z1 + 
-                      self.lambda_bounds*self.params.lambda_vz1*loss_Dirichlet_v_z0 + 
-                      self.lambda_bounds*self.params.lambda_vy*loss_Dirichlet_v_y +
-                      self.lambda_bounds*self.params.lambda_vx*loss_Dirichlet_v_x +
-                      self.lambda_bounds*self.params.lambda_wz1*loss_Dirichlet_w_z1 + 
-                      self.lambda_bounds*self.params.lambda_wz0*loss_Dirichlet_w_z0 + 
-                      self.lambda_bounds*self.params.lambda_wy*loss_Dirichlet_w_y +
-                      self.lambda_bounds*self.params.lambda_wx*loss_Dirichlet_w_x
+                      self.params.lambda_bounds*self.params.lambda_Tz1*loss_Dirichlet_T_z1 +
+                      self.params.lambda_bounds*self.params.lambda_Tz0*loss_Dirichlet_T_z0 +
+                      self.params.lambda_bounds*self.params.lambda_Tx*loss_Neumann_T_x + 
+                      self.params.lambda_bounds*self.params.lambda_Ty*loss_Neumann_T_y + 
+                      self.params.lambda_bounds*self.params.lambda_pz0*loss_Dirichlet_p_z0 + 
+                      self.params.lambda_bounds*self.params.lambda_pz1*loss_Dirichlet_p_z1 + 
+                      self.params.lambda_bounds*self.params.lambda_px*loss_Neumann_p_x + 
+                      self.params.lambda_bounds*self.params.lambda_py*loss_Neumann_p_y + 
+                      self.params.lambda_bounds*self.params.lambda_uz1*loss_Dirichlet_u_z1 + 
+                      self.params.lambda_bounds*self.params.lambda_uz0*loss_Dirichlet_u_z0 + 
+                      self.params.lambda_bounds*self.params.lambda_uy*loss_Dirichlet_u_y +
+                      self.params.lambda_bounds*self.params.lambda_ux*loss_Dirichlet_u_x +
+                      self.params.lambda_bounds*self.params.lambda_vz1*loss_Dirichlet_v_z1 + 
+                      self.params.lambda_bounds*self.params.lambda_vz1*loss_Dirichlet_v_z0 + 
+                      self.params.lambda_bounds*self.params.lambda_vy*loss_Dirichlet_v_y +
+                      self.params.lambda_bounds*self.params.lambda_vx*loss_Dirichlet_v_x +
+                      self.params.lambda_bounds*self.params.lambda_wz1*loss_Dirichlet_w_z1 + 
+                      self.params.lambda_bounds*self.params.lambda_wz0*loss_Dirichlet_w_z0 + 
+                      self.params.lambda_bounds*self.params.lambda_wy*loss_Dirichlet_w_y +
+                      self.params.lambda_bounds*self.params.lambda_wx*loss_Dirichlet_w_x
                       )
         
         # return dictionary of losses
