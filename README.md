@@ -72,5 +72,3 @@ and include the licence file in all copies with modifications or other code that
 ## Contact
 
 If you have a question or need help installing PINN or fixing a bug you have found, please contact me at: robin.barta@dlr.de
-
-We are happy to help and look forward to meeting you.
