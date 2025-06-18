@@ -3,7 +3,7 @@ Version: 1.0
 
 ## Project description
 
-This PINN framework was developed with a project team at the DLR Göttingen. It can be used to reconstruct temperature and pressure fields based on velocity data in thermal convective flows. Details on the architecture and the method are found in [1]. We are happy to help with modifying the PINN to reconstruct only pressure and velocity gradients in non-thermal flows. Also, The proposed PINN is compatible with PTV data generated with proPTV: https://github.com/RobinBarta/proPTV.
+This PINN framework was developed in a project team at the DLR Göttingen. It can be used to reconstruct temperature and pressure fields based on velocity data in thermal convective flows. Details on the architecture and the method are found in [1]. We are happy to help with modifying the PINN to reconstruct only pressure and velocity gradients in non-thermal flows. Also, The proposed PINN is compatible with PTV data generated with proPTV: https://github.com/RobinBarta/proPTV.
 
 The project comes with a test case involving a DNS generated Rayleigh-Bénard convection in a cubic cell with Ra=1E6 and Pr=0.7.
 
