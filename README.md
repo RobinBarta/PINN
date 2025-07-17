@@ -60,9 +60,9 @@ The code was also tested on a Windows 11 machine but in this case cuda12.3 and c
 
 When PINN is useful for your scientific work and you use it or parts of it, you need to cite us:
 
-[1] R.Barta, M.-C. Volk, C. Bauer, C. Wagner and M. Mommert. Temperature and pressure reconstruction in turbulent Rayleigh-Bénard convection by Lagrangian velocities using PINN, 2025. Preprint: https://doi.org/10.48550/arXiv.2505.02580
+[1] R.Barta, M.-C. Volk, C. Bauer, C. Wagner and M. Mommert. Temperature and pressure reconstruction in turbulent Rayleigh-Bénard convection by Lagrangian velocities using PINN. Measurements, Science & Technology, 2025. https://doi.org/10.1088/1361-6501/adee38
 
-[2] Marie-Christine Volk, Anne Sergent, Didier Lucor, Michael Mommert, Christian Bauer, Claus Wagner. A PINN Methodology for Temperature Field Reconstruction in the PIV Measurement Plane: Case of Rayleigh-Bénard Convection, 2025. Preprint: https://doi.org/10.48550/arXiv.2503.23801
+[2] M.-C. Volk, A. Sergent, D. Lucor, M. Mommert, C. Bauer, C. Wagner. A PINN Methodology for Temperature Field Reconstruction in the PIV Measurement Plane: Case of Rayleigh-Bénard Convection. International Communications in Heat and Mass Transfer, 2025. https://doi.org/10.1016/j.icheatmasstransfer.2025.109284
 
 [3] M. Mommert, R. Barta, C. Bauer, M. C. Volk, and C. Wagner. Periodically activated physics-informed neural networks for assimilation tasks for three-dimensional Rayleigh-Bénard convection. Computers and Fluids, 2024. https://doi.org/10.1016/j.compfluid.2024.106419
 
