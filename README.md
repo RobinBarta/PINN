@@ -68,9 +68,3 @@ When PINN is useful for your scientific work and you use it or parts of it, you 
 
 
 and include the licence file in all copies with modifications or other code that uses parts of the LPINN framework.
-
-## Contact
-
-If you have a question or need help installing PINN or fixing a bug you have found, please contact us via: michael.mommert@dlr.de
-
-We are happy to help and look forward to meeting you.
